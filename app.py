@@ -4,7 +4,9 @@ import pickle
 from sklearn.metrics.pairwise import cosine_similarity
 import os
 
-movie_embeddings = np.load(r"processed_data\embedding_matrix.npy")
+base_dir = os.path.dirname(os.path.abspath(__file__))
+
+movie_embeddings = np.load(os.path.join(base_dir, "processed_data", "embedding_matrix.npy"))
 
 import faiss
 
@@ -17,7 +19,7 @@ faiss.normalize_L2(embedding_matrix_f32)  # Normalize for cosine similarity
 index_faiss.add(embedding_matrix_f32)
 
 
-with open(r"processed_data\final_dataset.pkl", "rb") as f:
+with open(os.path.join(base_dir, "processed_data", "final_dataset.pkl"), "rb") as f:
     movies = pickle.load(f)
 
 from sentence_transformers import SentenceTransformer
