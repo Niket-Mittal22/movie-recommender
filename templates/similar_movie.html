@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block titleblock %}
+  Movie Search
+{% endblock titleblock %}
+
+{% block baseblock %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body text-white rounded" style="background-color: rgb(19, 19, 19);">
+                    <h5 class="card-title mb-3">You liked a movie! Tell me.</h5>
+                    <form action="/similar-movie" method="POST">
+                        <div class="mb-3" style="position: relative;">
+                            <label for="movieSearch" class="form-label">Write the movie name</label>
+                            <input type="text" class="form-control" name="title" id="movieSearch" 
+                                   placeholder="Type the movie..." autocomplete="off">
+                            <div id="suggestions" class="list-group" 
+                                 style="position: absolute; z-index: 1000; width: 100%; display: none;"></div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if top5 is defined %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow">
+                <div class="card-body text-white rounded" style="background-color: rgb(19, 19, 19);">
+                    <h5 class="card-title mb-3">Top 5 Matching Movies</h5>
+                    <table class="table table-dark table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">SNo</th>
+                                <th scope="col">Title</th>
+                                <th scope="col">Year</th>
+                                <th scope="col">IMDb rating</th>
+                                <th scope="col">Genres</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for movie in top5 %}
+                                <tr>
+                                    <th scope="row">{{loop.index}}</th>
+                                    <td>{{movie['title']}}</td>
+                                    <td>{{movie['year']}}</td>
+                                    <td>{{movie['averageRating']}}</td>
+                                    <td>{{movie['genres']}}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('movieSearch');
+    const suggestionsContainer = document.getElementById('suggestions');
+    
+    searchInput.addEventListener('input', function() {
+        const query = this.value.trim();
+        if (query.length < 2) {
+            suggestionsContainer.style.display = 'none';
+            return;
+        }
+        
+        fetch(`/movie-suggestions?q=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+                suggestionsContainer.innerHTML = '';
+                if (data.length > 0) {
+                    data.forEach(movie => {
+                        const item = document.createElement('a');
+                        item.href = '#';
+                        item.className = 'list-group-item list-group-item-action bg-dark text-white';
+                        item.textContent = movie.title;
+                        item.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            searchInput.value = movie.title;
+                            suggestionsContainer.style.display = 'none';
+                        });
+                        suggestionsContainer.appendChild(item);
+                    });
+                    suggestionsContainer.style.display = 'block';
+                } else {
+                    suggestionsContainer.style.display = 'none';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    });
+    
+    // Hide suggestions when clicking outside
+    document.addEventListener('click', function(e) {
+        if (e.target !== searchInput) {
+            suggestionsContainer.style.display = 'none';
+        }
+    });
+});
+</script>
+
+<style>
+.list-group-item {
+    border-color: #444;
+}
+.list-group-item:hover {
+    background-color: #333 !important;
+}
+</style>
+{% endblock baseblock %}

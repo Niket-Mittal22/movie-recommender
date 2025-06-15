@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block titleblock %}
+  Home
+{% endblock titleblock %}
+
+{% block baseblock %}
+    
+
+<div class="container mt-5">
+    <div class="row g-4">
+      
+      <!-- Plot-based Search Card -->
+      <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+          <div class="card-body text-white rounded" style="background-color: rgb(19, 19, 19);">
+            <h5 class="card-title ">🔍 Plot-based Search</h5>
+            <hr style="height: 2px; background-color: rgb(120, 119, 119); border: none;">
+            <p class="card-text">Describe the movie you want to watch, and we’ll find matches based on the plot.</p>
+            <a href="/plot-search" class="btn btn-danger">Try Plot Search</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Similar Movie Search Card -->
+      <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+          <div class="card-body text-white rounded" style="background-color: rgb(19, 19, 19);">
+            <h5 class="card-title">🎬 Similar Movie Finder</h5>
+            <hr style="height: 2px; background-color: rgb(118, 117, 117); border: none;">
+            <p class="card-text">Enter a movie you like, and we’ll suggest similar titles you may enjoy.</p>
+            <a href="/similar-movie" class="btn btn-danger">Find Similar Movies</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 Bundle JS (includes Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-qNHd+GcFDm4Q1MSD6Zgdr6Eqskz4m7gMSlBlKqYxB4oYut1zZ7K7p8d3fJTwvsVd" crossorigin="anonymous"></script>
+
+</body>
+</html>
+
+{% endblock baseblock %}
