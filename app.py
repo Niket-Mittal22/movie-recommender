@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 import numpy as np
 import pickle
 from sklearn.metrics.pairwise import cosine_similarity
+import os
 
 movie_embeddings = np.load(r"processed_data\embedding_matrix.npy")
 
@@ -97,4 +98,5 @@ def movie_suggestions():
     return jsonify(suggestions)
 
 if __name__ == "__main__":
-    app.run(debug = True, port = 8000)
+    port = int(os.environ.get("PORT", 8000))  # Use PORT from env or default to 8000
+    app.run(debug=False, host="0.0.0.0", port=port)
